@@ -104,7 +104,7 @@
         function zoekIniTunes(song) {
             const schoneArtiest = song.artist.replace('&', ' ');
             const zoekterm = encodeURIComponent(schoneArtiest + " " + song.title);
-            const apiUrl = `https://itunes.apple.com/search?term={zoekterm}&limit=1&entity=song`;
+            const apiUrl = `https://apple.com{zoekterm}&limit=1&entity=song`;
 
             fetch(apiUrl)
                 .then(response => response.json())
