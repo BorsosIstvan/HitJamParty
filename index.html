@@ -101,29 +101,33 @@
         }
 
         // 3. CALL ITUNES API (Vervangt cURL uit PHP)
-        function zoekIniTunes(song) {
-            const schoneArtiest = song.artist.replace('&', ' ');
-            const zoekterm = encodeURIComponent(schoneArtiest + " " + song.title);
-            const apiUrl = "https://itunes.apple.com/search?term=" + zoekterm + "&limit=1&entity=song";
+		function zoekIniTunes(song) {
+			const schoneArtiest = song.artist.replace('&', ' ');
+			const zoekterm = encodeURIComponent(schoneArtiest + " " + song.title);
+			
+			// Exact dezelfde URL-opbouw als in jouw PHP-versie:
+			const apiUrl = "https://itunes.apple.com/search?term=" + zoekterm + "&limit=1&entity=song";
 
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
-                        audioPlayer.src = data.results[0].previewUrl;
-                        document.getElementById('status').innerText = ""; // Succes, foutmelding weg
-                        audioBtn.disabled = false;
-                        document.getElementById('revealBtn').style.display = "block";
-                    } else {
-                        document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer. Probeer de volgende.";
-                        document.getElementById('nextBtn').style.display = "block";
-                    }
-                })
-                .catch(err => {
-                    document.getElementById('status').innerText = "Netwerkfout bij laden audio.";
-                    document.getElementById('nextBtn').style.display = "block";
-                });
-        }
+			fetch(apiUrl)
+				.then(response => response.json())
+				.then(data => {
+					// FIX: We controleren nu netjes op data.results[0].previewUrl (net als $json['results'][0])
+					if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
+						audioPlayer.src = data.results[0].previewUrl;
+						document.getElementById('status').innerText = ""; // Succes, melding weg
+						audioBtn.disabled = false;
+						document.getElementById('revealBtn').style.display = "block";
+					} else {
+						document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer.";
+						document.getElementById('nextBtn').style.display = "block";
+					}
+				})
+				.catch(err => {
+					document.getElementById('status').innerText = "Netwerkfout bij laden audio.";
+					document.getElementById('nextBtn').style.display = "block";
+				});
+		}
+
 
         // 4. AUDIO BEDIENING
         function toggleAudio() {
