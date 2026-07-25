@@ -1,0 +1,17 @@
+{
+  "short_name": "HitJamParty",
+  "name": "HitJamParty - Hits and Game",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#121212",
+  "theme_color": "#ff4757",
+  "display": "standalone",
+  "orientation": "portrait"
+}

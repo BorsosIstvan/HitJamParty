@@ -4,13 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HitJamParty</title>
+    <!-- Link naar het PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff4757">
+    
     <style>
         body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding-top: 50px; }
         h1 { color: #ff4757; }
+        .btn { background: #ff4757; color: white; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 5px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <h1>🎉 Welkom bij HitJamParty! 🎉</h1>
-    <p>Dit is een testpagina die live draait via Github pages.</p>
+
+    <h1>🎉 HitJamParty 🎉</h1>
+    <p>Welkom bij de PHP-loze PWA versie van HitJam!</p>
+    
+    <button class="btn" onclick="startSpel()">Start HitJam Spel</button>
+
+    <script>
+        // Start het spel (pure JavaScript in plaats van PHP-redirects)
+        function startSpel() {
+            alert("Spel start nu via JavaScript frontend logica!");
+        }
+
+        // Registreer de Service Worker voor PWA installatie
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker geregistreerd!', reg))
+                    .catch(err => console.log('Service Worker faal:', err));
+            });
+        }
+    </script>
 </body>
 </html>
+
