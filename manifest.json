@@ -3,7 +3,7 @@
   "name": "HitJamParty - Hits and Game",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icon/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
