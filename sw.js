@@ -1,10 +1,12 @@
 // 1. Verander dit nummer (bijv. naar v2, v3) telkens als je de app updatet!
-const CACHE_NAME = 'hitjamparty-v4'; 
+const CACHE_NAME = 'hitjamparty-v5'; // Verhoogd naar v5!
 
 const ASSETS = [
   '.',
   'index.html',
-  'login.html', // Zorg dat login.html er ook in staat!
+  'login.html',
+  'style.css',      // Toegevoegd!
+  'app.js',         // Toegevoegd!
   'manifest.json',
   'songs.json'
 ];
