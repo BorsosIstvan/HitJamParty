@@ -69,7 +69,7 @@ function laadNieuwNummer() {
 }
 
 // ==========================================
-// 3. ITUNES API INTEGRATIE (JSONP)
+// 3. ITUNES API INTEGRATIE (JSONP) - REPARATIE
 // ==========================================
 function zoekIniTunes(song) {
     const schoneArtiest = song.artist.replace('&', ' ');
@@ -77,9 +77,10 @@ function zoekIniTunes(song) {
     const callbackName = 'itunesCallback_' + Math.floor(Math.random() * 100000);
     
     window[callbackName] = function(data) {
-        if (data.results && data.results.length > 0 && data.results.previewUrl) {
+        // FIX: We controleren nu exact op data.results[0].previewUrl
+        if (data.results && data.results.length > 0 && data.results[0] && data.results[0].previewUrl) {
             audioPlayer.crossOrigin = "anonymous"; 
-            audioPlayer.src = data.results.previewUrl; 
+            audioPlayer.src = data.results[0].previewUrl; // FIX: [0] toegevoegd
             
             document.getElementById('status').innerText = ""; 
             audioBtn.disabled = false;
@@ -89,6 +90,8 @@ function zoekIniTunes(song) {
             document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer.";
             document.getElementById('nextBtn').style.display = "block";
         }
+        
+        // Netjes opruimen van het script uit de pagina
         const scriptElement = document.getElementById(callbackName);
         if (scriptElement) scriptElement.remove();
         delete window[callbackName];
@@ -99,6 +102,7 @@ function zoekIniTunes(song) {
     script.src = "https://itunes.apple.com/search?term=" + zoekterm + "&limit=1&entity=song&callback=" + callbackName;
     document.body.appendChild(script);
 }
+
 
 // ==========================================
 // 4. AUDIO CONTROLS
