@@ -58,7 +58,7 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div id="hitjamApp" class="app-container" style="position: relative; overflow: hidden;">
         <div>
             <h1 class="logo">HitJamParty</h1>
             <p style="color:#aaa; font-size:14px;">100% Serverless PWA via GitHub!</p>
@@ -95,11 +95,12 @@
 		</div>
 
 
-        <!-- AUDIO CONTROLLER -->
-        <div class="play-box">
-            <button id="audioBtn" class="btn-audio" onclick="toggleAudio()" disabled>▶</button>
-            <audio id="audioPlayer" onended="audioGestaakt()"></audio>
-        </div>
+		<!-- AUDIO CONTROLLER (ID aangepast voor de visualizer) -->
+		<div class="play-box" style="position: relative; z-index: 1;">
+			<button id="audioBtn" class="btn-audio" onclick="toggleAudio()" disabled>▶</button>
+			<!-- Het ID is nu partyAudioEngine -->
+			<audio id="partyAudioEngine" onended="audioGestaakt()"></audio>
+		</div>
 		
 		<!-- 🧱 QUIZKOPPEN CONTAINER -->
 		<div id="quizContainer" style="margin: 20px 0; display: none;">
@@ -142,6 +143,8 @@
             POWERED BY JBL & APPLE MUSIC
         </div>
     </div>
+	
+	<script src="comp_winamp_visualizer.js"></script>
 
     <script>
 		// 1. BEVEILIGING: Check of de gebruiker een naam heeft ingesteld
@@ -194,6 +197,7 @@
 
 		// 3. Kies een random nummer uit de ACTIEVE (gefilterde) lijst
 		function laadNieuwNummer() {
+			toggleWinampVisualizer(false);
 			if (actieveLijst.length === 0) {
 				document.getElementById('status').innerText = "Dit album is nog leeg!";
 				return;
@@ -250,21 +254,34 @@
 
 
         // 4. AUDIO BEDIENING
-        function toggleAudio() {
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-                audioBtn.innerText = "⏸";
-                audioBtn.classList.add('playing');
-            } else {
-                audioPlayer.pause();
-                audioGestaakt();
-            }
-        }
+		function toggleAudio() {
+			// We hernoemen de variabele naar de nieuwe audio-ID
+			const audioPlayer = document.getElementById('partyAudioEngine'); 
+			
+			if (audioPlayer.paused) {
+				// CRUCIAL HACK: Vertel de browser dat iTunes-data gescand mag worden door de Web Audio API
+				audioPlayer.crossOrigin = "anonymous"; 
+				
+				audioPlayer.play();
+				audioBtn.innerText = "⏸";
+				audioBtn.classList.add('playing');
+				
+				// 🔥 START DE WINAMP VISUALIZER
+				toggleWinampVisualizer(true);
+			} else {
+				audioPlayer.pause();
+				audioGestaakt();
+			}
+		}
 
-        function audioGestaakt() {
-            audioBtn.innerText = "▶";
-            audioBtn.classList.remove('playing');
-        }
+		function audioGestaakt() {
+			audioBtn.innerText = "▶";
+			audioBtn.classList.remove('playing');
+			
+			// 🔥 STOP DE WINAMP VISUALIZER
+			toggleWinampVisualizer(false);
+		}
+
 
         // 5. ONTHUL EN ACTIES
         function onthulLiedje() {
