@@ -6,55 +6,12 @@
     <title>HitJamParty - PWA</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#160c1b">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #0b0c10; color: #ffffff; display: flex; justify-content: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 450px; background: linear-gradient(180deg, #160c1b 0%, #0b0c10 100%); padding: 25px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 30px rgba(0,0,0,0.6); text-align: center; }
-        .logo { font-size: 32px; font-weight: 900; background: linear-gradient(45deg, #ff2d55, #ff9500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; margin: 0; }
-        
-        .play-box { margin: 20px 0; }
-        .btn-audio { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #ff2d55, #e01b43); border: none; color: white; font-size: 40px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 45, 85, 0.4); transition: all 0.2s; display: inline-block; }
-        .btn-audio.playing { background: #121212; border: 3px solid #ff2d55; color: #ff2d55; box-shadow: none; }
-        
-        .song-info-card { display: none; background: rgba(255, 255, 255, 0.04); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); margin: 20px 0; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .info-year { font-size: 54px; font-weight: 900; color: #ff9500; margin-bottom: 5px; }
-        .info-title { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
-        .info-artist { color: #b3b3b3; font-size: 16px; }
-
-        .btn { width: 100%; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; transition: all 0.2s; text-transform: uppercase; margin-bottom: 15px; box-sizing: border-box; }
-        .btn-reveal { background: #ffffff; color: #0b0c10; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
-        .btn-next { background: linear-gradient(90deg, #007bff, #00ffcc); color: white; display: none; }
-        
-        .status-msg { color: #ff2d55; font-weight: bold; margin: 20px 0; }
-        .footer { font-size: 11px; color: #4f4f4f; text-align: center; letter-spacing: 1px; }
-		.btn-quiz {
-			background: #1f2026;
-			color: white;
-			border: 1px solid #33343f;
-			padding: 14px;
-			border-radius: 10px;
-			font-size: 16px;
-			font-weight: bold;
-			cursor: pointer;
-			transition: all 0.2s;
-		}
-		.btn-quiz:active {
-			transform: scale(0.95);
-		}
-		.btn-quiz.correct {
-			background: #00ffcc !important;
-			color: #0b0c10 !important;
-			border-color: #00ffcc !important;
-		}
-		.btn-quiz.incorrect {
-			background: #ff2d55 !important;
-			color: white !important;
-			border-color: #ff2d55 !important;
-		}
-
-    </style>
+    
+    <!-- Externe QR-code bibliotheek -->
+    <script src="https://cloudflare.com"></script>
+    
+    <!-- Link naar jouw losse CSS-bestand -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -63,362 +20,83 @@
             <h1 class="logo">HitJamParty</h1>
             <p style="color:#aaa; font-size:14px;">100% Serverless PWA via GitHub!</p>
         </div>
-		
-		<!-- 💿 NIEUW: PROFESSIONELE PAKKET SELECTOR -->
-		<div style="margin: 15px 0;">
-			<label for="packSelect" style="color: #aaa; font-size: 14px; display: block; margin-bottom: 5px;">Kies je Hitster Album:</label>
-			<select id="packSelect" onchange="wisselVanAlbum()" style="width: 100%; padding: 12px; border-radius: 10px; background: #1f2026; color: white; border: 1px solid #33343f; font-size: 16px; font-weight: bold; text-align: center;">
-				<option value="alle">🌍 Alle Hits Mix</option>
-				<option value="rock">🎸 Hitster Rock Edition</option>
-				<option value="pop">🎤 Modern Pop Hits</option>
-				<option value="disco">🪩 Disco Fever</option>
-			</select>
-		</div>
+        
+        <!-- 💿 PAKKET SELECTOR -->
+        <div style="margin: 15px 0;">
+            <label for="packSelect" style="color: #aaa; font-size: 14px; display: block; margin-bottom: 5px;">Kies je Hitster Album:</label>
+            <select id="packSelect" onchange="wisselVanAlbum()" style="width: 100%; padding: 12px; border-radius: 10px; background: #1f2026; color: white; border: 1px solid #33343f; font-size: 16px; font-weight: bold; text-align: center;">
+                <option value="alle">🌍 Alle Hits Mix</option>
+                <option value="rock">🎸 Hitster Rock Edition</option>
+                <option value="pop">🎤 Modern Pop Hits</option>
+                <option value="disco">🪩 Disco Fever</option>
+            </select>
+        </div>
 
         <!-- Status meldingen (Laden / Fouten) -->
         <div id="status" class="status-msg">Liedje laden...</div>
-		
-		<!-- 🧱 SCORE & STREAK DISPLAY -->
-		<div style="display: flex; justify-content: space-between; margin: 15px 0; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
-			<div>
-				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Speler</div>
-				<div id="playerDisplay" style="font-size: 18px; font-weight: bold; color: #ff9500;">---</div>
-			</div>
-			<div style="text-align: center;">
-				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Huidige Score</div>
-				<div id="scoreDisplay" style="font-size: 22px; font-weight: 900; color: #00ffcc;">0</div>
-			</div>
-			<div style="text-align: right;">
-				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">🔥 Streak</div>
-				<div id="streakDisplay" style="font-size: 22px; font-weight: 900; color: #ff2d55;">0</div>
-			</div>
-		</div>
+        
+        <!-- 🧱 SCORE & STREAK DISPLAY -->
+        <div class="score-container">
+            <div>
+                <div class="score-label">Speler</div>
+                <div id="playerDisplay" class="score-value-player">---</div>
+            </div>
+            <div style="text-align: center;">
+                <div class="score-label">Huidige Score</div>
+                <div id="scoreDisplay" class="score-value-green">0</div>
+            </div>
+            <div style="text-align: right;">
+                <div class="score-label">🔥 Streak</div>
+                <div id="streakDisplay" class="score-value-red">0</div>
+            </div>
+        </div>
 
-
-		<!-- AUDIO CONTROLLER (ID aangepast voor de visualizer) -->
-		<div class="play-box" style="position: relative; z-index: 1;">
-			<button id="audioBtn" class="btn-audio" onclick="toggleAudio()" disabled>▶</button>
-			<!-- Het ID is nu partyAudioEngine -->
-			<audio id="partyAudioEngine" onended="audioGestaakt()"></audio>
-		</div>
-		
-		<!-- 🧱 QUIZKOPPEN CONTAINER -->
-		<div id="quizContainer" style="margin: 20px 0; display: none;">
-			<p style="color: #aaa; font-size: 14px; margin-bottom: 10px;">Raad het juiste jaartal:</p>
-			<div id="quizButtons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-				<!-- Knoppen worden hier dynamisch ingeladen via JavaScript -->
-			</div>
-			<div id="quizFeedback" style="margin-top: 15px; font-weight: bold; font-size: 18px;"></div>
-		</div>
-
-		
+        <!-- AUDIO CONTROLLER -->
+        <div class="play-box" style="position: relative; z-index: 1;">
+            <button id="audioBtn" class="btn-audio" onclick="toggleAudio()" disabled>▶</button>
+            <audio id="partyAudioEngine" onended="audioGestaakt()"></audio>
+        </div>
+        
+        <!-- 🧱 QUIZKOPPEN CONTAINER -->
+        <div id="quizContainer" style="margin: 20px 0; display: none;">
+            <p style="color: #aaa; font-size: 14px; margin-bottom: 10px;">Raad het juiste jaartal:</p>
+            <div id="quizButtons" class="quiz-grid"></div>
+            <div id="quizFeedback" class="quiz-feedback"></div>
+        </div>
+        
         <!-- GEHEIME INFOKAART -->
         <div id="songCard" class="song-info-card">
             <div id="songYear" class="info-year">????</div>
             <div id="songTitle" class="info-title">Titel</div>
             <div id="songArtist" class="info-artist">Artiest</div>
         </div>
-			
+            
         <!-- ACTIEKNOPPEN -->
         <div>
             <button id="revealBtn" class="btn btn-reveal" onclick="onthulLiedje()" style="display:none;">Onthul Nummer</button>
             <button id="nextBtn" class="btn btn-next" onclick="laadNieuwNummer()">Volgend Nummer</button>
         </div>
-		
-		<!-- 📱 DEEL DE APP MET VRIENDEN (KLIKBAAR) -->
-		<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-			<!-- Klikbare tekst die de functie aanroept -->
-			<p onclick="toggleQRCode()" style="color: #ff9500; font-size: 14px; margin-bottom: 12px; letter-spacing: 0.5px; cursor: pointer; user-select: none; font-weight: bold;">
-				<span id="qrArrow">▶️</span> Scan om te installeren op je telefoon
-			</p>
-			
-			<!-- De QR-code staat nu standaard verborgen via display: none -->
-			<div id="qrWrapper" style="display: none; margin-top: 10px;">
-				<div id="qrcode" style="background: white; padding: 12px; display: inline-block; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);"></div>
-			</div>
-		</div>
+        
+        <!-- 📱 DEEL DE APP MET VRIENDEN (KLIKBAAR) -->
+        <div class="qr-section">
+            <p onclick="toggleQRCode()" class="qr-toggle-text">
+                <span id="qrArrow">▶️</span> Scan om te installeren op je telefoon
+            </p>
+            <div id="qrWrapper" style="display: none; margin-top: 10px;">
+                <div id="qrcode" class="qr-box"></div>
+            </div>
+        </div>
 
-		
         <div class="footer">
             POWERED BY JBL & APPLE MUSIC
         </div>
     </div>
-	
-	<script src="comp_winamp_visualizer.js"></script>
 
-    <script>
-		// 1. BEVEILIGING: Check of de gebruiker een naam heeft ingesteld
-		const huidigeSpeler = localStorage.getItem('hj_current_user');
-		if (!huidigeSpeler) {
-			window.location.href = "login.html";
-		}
+    <!-- 1. Eerst je Winamp Visualizer script inladen -->
+    <script src="comp_winamp_visualizer.js"></script>
+    
+    <!-- 2. Daarna jouw losse JavaScript spel-logica bestand -->
+    <script src="app.js"></script>
 
-		// Score variabelen initialiseren
-		let huidigeScore = 0;
-		let huidigeStreak = 0;
-
-		let gameSongs = [];       
-		let actieveLijst = [];    
-		let huidigNummer = null;
-		const audioPlayer = document.getElementById('audioPlayer');
-		const audioBtn = document.getElementById('audioBtn');
-
-		// 2. Laad de JSON database en zet de spelersnaam klaar
-		function startApp() {
-			// Toon de speelnaam direct in het scoreblok
-			document.getElementById('playerDisplay').innerText = huidigeSpeler;
-			
-			fetch('songs.json')
-				.then(response => response.json())
-				.then(data => {
-					gameSongs = data;
-					wisselVanAlbum(); 
-				})
-				.catch(err => {
-					document.getElementById('status').innerText = "Fout bij laden van de database.";
-				});
-		}
-
-
-		// 2. Filter de nummers op basis van het gekozen album
-		function wisselVanAlbum() {
-			const gekozenPack = document.getElementById('packSelect').value;
-			
-			if (gekozenPack === "alle") {
-				actieveLijst = [...gameSongs]; // Kopieer alle nummers
-			} else {
-				// Filter alleen de nummers die bij het gekozen album horen
-				actieveLijst = gameSongs.filter(song => song.pack === gekozenPack);
-			}
-
-			// Start direct een nieuw nummer uit het nieuw gekozen album
-			laadNieuwNummer();
-		}
-
-		// 3. Kies een random nummer uit de ACTIEVE (gefilterde) lijst
-		function laadNieuwNummer() {
-			toggleWinampVisualizer(false);
-			if (actieveLijst.length === 0) {
-				document.getElementById('status').innerText = "Dit album is nog leeg!";
-				return;
-			}
-
-			document.getElementById('status').innerText = "Liedje zoeken...";
-			document.getElementById('songCard').style.display = "none";
-			document.getElementById('nextBtn').style.display = "none";
-			audioBtn.disabled = true;
-			audioBtn.innerText = "▶";
-			audioBtn.classList.remove('playing');
-			document.getElementById('quizContainer').style.display = "none";
-
-			// Kies nu uit de actieveLijst in plaats van gameSongs!
-			huidigNummer = actieveLijst[Math.floor(Math.random() * actieveLijst.length)];
-
-			zoekIniTunes(huidigNummer);
-		}
-
-
-        // 3. CALL ITUNES API (Vervangt cURL uit PHP)
-		function zoekIniTunes(song) {
-			const schoneArtiest = song.artist.replace('&', ' ');
-			const zoekterm = encodeURIComponent(schoneArtiest + " " + song.title);
-			
-			// We maken een unieke naam voor de tijdelijke callback-functie
-			const callbackName = 'itunesCallback_' + Math.floor(Math.random() * 100000);
-			
-			// Deze functie wordt door iTunes aangeroepen zodra de data binnen is
-			window[callbackName] = function(data) {
-				if (data.results && data.results.length > 0 && data.results[0].previewUrl) {
-					audioPlayer.src = data.results[0].previewUrl; // FIX: results is een array [0]
-					document.getElementById('status').innerText = ""; 
-					audioBtn.disabled = false;
-					document.getElementById('revealBtn').style.display = "none";
-					genereerQuizKnoppen(song.year);
-				} else {
-					document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer.";
-					document.getElementById('nextBtn').style.display = "block";
-				}
-				// Ruim het tijdelijke script netjes op uit de pagina
-				document.getElementById(callbackName).remove();
-				delete window[callbackName];
-			};
-
-			// We omzeilen CORS door een <script> tag aan te maken in plaats van een fetch()
-			const script = document.createElement('script');
-			script.id = callbackName;
-			// Let op de &callback= toevoeging aan het einde!
-			script.src = "https://itunes.apple.com/search?term=" + zoekterm + "&limit=1&entity=song&callback=" + callbackName;
-			document.body.appendChild(script);
-		}
-
-
-
-        // 4. AUDIO BEDIENING
-		function toggleAudio() {
-			// We hernoemen de variabele naar de nieuwe audio-ID
-			const audioPlayer = document.getElementById('partyAudioEngine'); 
-			
-			if (audioPlayer.paused) {
-				// CRUCIAL HACK: Vertel de browser dat iTunes-data gescand mag worden door de Web Audio API
-				audioPlayer.crossOrigin = "anonymous"; 
-				
-				audioPlayer.play();
-				audioBtn.innerText = "⏸";
-				audioBtn.classList.add('playing');
-				
-				// 🔥 START DE WINAMP VISUALIZER
-				toggleWinampVisualizer(true);
-			} else {
-				audioPlayer.pause();
-				audioGestaakt();
-			}
-		}
-
-		function audioGestaakt() {
-			audioBtn.innerText = "▶";
-			audioBtn.classList.remove('playing');
-			
-			// 🔥 STOP DE WINAMP VISUALIZER
-			toggleWinampVisualizer(false);
-		}
-
-
-        // 5. ONTHUL EN ACTIES
-        function onthulLiedje() {
-            document.getElementById('songYear').innerText = huidigNummer.year;
-            document.getElementById('songTitle').innerText = huidigNummer.title;
-            document.getElementById('songArtist').innerText = huidigNummer.artist;
-            
-            document.getElementById('songCard').style.display = "block";
-            document.getElementById('revealBtn').style.display = "none";
-            document.getElementById('nextBtn').style.display = "block";
-        }
-
-        // Start het eerste nummer zodra de pagina laadt
-        window.onload = startApp;
-
-        // PWA Service Worker registratie
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
-            });
-        }
-		
-		// 1. Genereer 4 meerkeuzeopties (1 goede en 3 foute jaartallen)
-		function genereerQuizKnoppen(correctJaar) {
-			const quizButtonsContainer = document.getElementById('quizButtons');
-			const feedbackContainer = document.getElementById('quizFeedback');
-			
-			quizButtonsContainer.innerHTML = ""; // Maak leeg van de vorige ronde
-			feedbackContainer.innerText = "";    // Reset feedback tekst
-
-			// Verzamel unieke jaartallen uit de actieve lijst om als foute opties te gebruiken
-			let alleJaren = [...new Set(actieveLijst.map(s => s.year))];
-			// Haal het juiste jaar er tijdelijk uit om duplicaten te voorkomen
-			alleJaren = alleJaren.filter(y => y !== correctJaar);
-
-			// Hussel de foute jaren en pak er maximaal 3
-			alleJaren.sort(() => 0.5 - Math.random());
-			let gekozenOpties = alleJaren.slice(0, 3);
-			
-			// Voeg het juiste jaar toe aan de opties
-			gekozenOpties.push(correctJaar);
-
-			// Hussel de uiteindelijke 4 opties zodat het juiste antwoord niet altijd op dezelfde plek staat
-			gekozenOpties.sort(() => 0.5 - Math.random());
-
-			// Maak voor elke optie een HTML-knop aan
-			gekozenOpties.forEach(jaar => {
-				const knop = document.createElement('button');
-				knop.className = 'btn-quiz';
-				knop.innerText = jaar;
-				knop.onclick = () => controleerAntwoord(knop, jaar, correctJaar);
-				quizButtonsContainer.appendChild(knop);
-			});
-
-			// Toon de quiz container
-			document.getElementById('quizContainer').style.display = "block";
-		}
-
-		// 2. Controleer of de speler het goed heeft geraden
-		function controleerAntwoord(gekozenKnop, gekozenJaar, correctJaar) {
-			const alleKnoppen = document.querySelectorAll('.btn-quiz');
-			const feedbackContainer = document.getElementById('quizFeedback');
-
-			// Deactiveer alle knoppen direct zodat je niet meerdere keren kunt klikken
-			alleKnoppen.forEach(btn => btn.disabled = true);
-
-			if (gekozenJaar === correctJaar) {
-				gekozenKnop.classList.add('correct');
-				feedbackContainer.style.color = "#00ffcc";
-				feedbackContainer.innerText = "🎉 Helemaal goed!";
-				
-				// PUNTEN BEREKENEN: 10 basispunten + streak bonus (bijv. streak van 3 geeft 3 bonuspunten)
-				huidigeStreak++;
-				huidigeScore += 10 + huidigeStreak;
-			} else {
-				gekozenKnop.classList.add('incorrect');
-				feedbackContainer.style.color = "#ff2d55";
-				feedbackContainer.innerText = `😢 Helaas! Het was ${correctJaar}.`;
-
-				// Streak wordt gereset bij een fout antwoord
-				huidigeStreak = 0;
-
-				// Kleur de juiste knop alsnog groen
-				alleKnoppen.forEach(btn => {
-					if (parseInt(btn.innerText) === correctJaar) {
-						btn.classList.add('correct');
-					}
-				});
-			}
-
-			// Update de cijfers live op het scherm
-			document.getElementById('scoreDisplay').innerText = huidigeScore;
-			document.getElementById('streakDisplay').innerText = huidigeStreak;
-
-			// Sla de eventuele nieuwe highscore lokaal op in de browser
-			const oudeHighScore = localStorage.getItem(`hj_highscore_${huidigeSpeler}`) || 0;
-			if (huidigeScore > oudeHighScore) {
-				localStorage.setItem(`hj_highscore_${huidigeSpeler}`, huidigeScore);
-			}
-
-			// Toon direct de infokaart van het nummer en verberg de onthulknop
-			document.getElementById('songYear').innerText = huidigNummer.year;
-			document.getElementById('songTitle').innerText = huidigNummer.title;
-			document.getElementById('songArtist').innerText = huidigNummer.artist;
-			document.getElementById('songCard').style.display = "block";
-			document.getElementById('revealBtn').style.display = "none";
-			document.getElementById('nextBtn').style.display = "block";
-		}
-		
-		// Genereer automatisch de QR-code bij het laden van de pagina
-		window.addEventListener('DOMContentLoaded', () => {
-			new QRCode(document.getElementById("qrcode"), {
-				text: "https://borsosistvan.github.io/HitJamParty",
-				width: 140,
-				height: 140,
-				colorDark : "#0b0c10", // De kleur van de blokjes (matcht met je achtergrond)
-				colorLight : "#ffffff", // De achtergrondkleur van de QR-code
-				correctLevel : QRCode.CorrectLevel.H
-			});
-		});
-
-		function toggleQRCode() {
-			const qrWrapper = document.getElementById('qrWrapper');
-			const qrArrow = document.getElementById('qrArrow');
-
-			// Als de QR-code verborgen is, toon hem dan
-			if (qrWrapper.style.display === "none") {
-				qrWrapper.style.display = "block";
-				qrArrow.innerText = "🔽"; // Pijltje naar beneden als hij open is
-			} else {
-				// Anders verbergen we hem weer
-				qrWrapper.style.display = "none";
-				qrArrow.innerText = "▶️"; // Pijltje naar rechts als hij dicht is
-			}
-		}
-
-
-    </script>
 </body>
 </html>

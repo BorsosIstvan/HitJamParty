@@ -1,0 +1,164 @@
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    margin: 0; 
+    background-color: #0b0c10; 
+    color: #ffffff; 
+    display: flex; 
+    justify-content: center; 
+    min-height: 100vh; 
+}
+
+.app-container { 
+    width: 100%; 
+    max-width: 450px; 
+    background: linear-gradient(180deg, #160c1b 0%, #0b0c10 100%); 
+    padding: 25px 20px; 
+    box-sizing: border-box; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    box-shadow: 0 0 30px rgba(0,0,0,0.6); 
+    text-align: center; 
+}
+
+.logo { 
+    font-size: 32px; 
+    font-weight: 900; 
+    background: linear-gradient(45deg, #ff2d55, #ff9500); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    text-transform: uppercase; 
+    margin: 0; 
+}
+
+.score-container {
+    display: flex; 
+    justify-content: space-between; 
+    margin: 15px 0; 
+    background: rgba(255, 255, 255, 0.05); 
+    padding: 15px; 
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.score-label {
+    font-size: 11px; 
+    color: #aaa; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+.score-value-player { font-size: 18px; font-weight: bold; color: #ff9500; }
+.score-value-green { font-size: 22px; font-weight: 900; color: #00ffcc; }
+.score-value-red { font-size: 22px; font-weight: 900; color: #ff2d55; }
+
+.play-box { margin: 20px 0; }
+
+.btn-audio { 
+    width: 120px; 
+    height: 120px; 
+    border-radius: 50%; 
+    background: linear-gradient(135deg, #ff2d55, #e01b43); 
+    border: none; 
+    color: white; 
+    font-size: 40px; 
+    cursor: pointer; 
+    box-shadow: 0 8px 25px rgba(255, 45, 85, 0.4); 
+    transition: all 0.2s; 
+    display: inline-block; 
+}
+
+.btn-audio.playing { 
+    background: #121212; 
+    border: 3px solid #ff2d55; 
+    color: #ff2d55; 
+    box-shadow: none; 
+}
+
+.quiz-grid {
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px;
+}
+
+.quiz-feedback {
+    margin-top: 15px; 
+    font-weight: bold; 
+    font-size: 18px;
+}
+
+.btn-quiz {
+    background: #1f2026;
+    color: white;
+    border: 1px solid #33343f;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-quiz:active { transform: scale(0.95); }
+.btn-quiz.correct { background: #00ffcc !important; color: #0b0c10 !important; border-color: #00ffcc !important; }
+.btn-quiz.incorrect { background: #ff2d55 !important; color: white !important; border-color: #ff2d55 !important; }
+
+.song-info-card { 
+    display: none; 
+    background: rgba(255, 255, 255, 0.04); 
+    padding: 20px; 
+    border-radius: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    margin: 20px 0; 
+    animation: fadeIn 0.4s ease; 
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.info-year { font-size: 54px; font-weight: 900; color: #ff9500; margin-bottom: 5px; }
+.info-title { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
+.info-artist { color: #b3b3b3; font-size: 16px; }
+
+.btn { 
+    width: 100%; 
+    padding: 16px; 
+    border-radius: 14px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    border: none; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+    text-transform: uppercase; 
+    margin-bottom: 15px; 
+    box-sizing: border-box; 
+}
+
+.btn-reveal { background: #ffffff; color: #0b0c10; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+.btn-next { background: linear-gradient(90deg, #007bff, #00ffcc); color: white; display: none; }
+
+.status-msg { color: #ff2d55; font-weight: bold; margin: 20px 0; }
+.footer { font-size: 11px; color: #4f4f4f; text-align: center; letter-spacing: 1px; }
+
+.qr-section {
+    margin-top: 30px; 
+    padding-top: 20px; 
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.qr-toggle-text {
+    color: #ff9500; 
+    font-size: 14px; 
+    margin-bottom: 12px; 
+    letter-spacing: 0.5px; 
+    cursor: pointer; 
+    user-select: none; 
+    font-weight: bold;
+}
+
+.qr-box {
+    background: white; 
+    padding: 12px; 
+    display: inline-block; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
