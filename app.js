@@ -96,7 +96,7 @@ function zoekIniTunes(song) {
 
     const script = document.createElement('script');
     script.id = callbackName;
-    script.src = "https://itunes.apple.com/search" + zoekterm + "&limit=1&entity=song&callback=" + callbackName;
+    script.src = "https://itunes.apple.com/search?term=" + zoekterm + "&limit=1&entity=song&callback=" + callbackName;
     document.body.appendChild(script);
 }
 
