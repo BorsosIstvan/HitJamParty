@@ -66,39 +66,52 @@
     </div>
 
     <script>
-        // 1. DATABASE MET LIEDJES (Vervangt hj2_db.php)
-        const gameSongs = [
-            { id: 1, artist: "Michael Jackson", title: "Thriller", year: 1982 },
-            { id: 2, artist: "Dua Lipa", title: "Levitating", year: 2020 },
-            { id: 3, artist: "Avicii", title: "Wake Me Up", year: 2013 },
-            { id: 4, artist: "Queen", title: "Bohemian Rhapsody", year: 1975 }
-        ];
+		// 1. BEVEILIGING: Check of de gebruiker is ingelogd (Vervangt session_start())
+		const huidigeSpeler = localStorage.getItem('hj_current_user');
+		if (!huidigeSpeler) {
+			window.location.href = "login.html"; // Niet ingelogd? Terug naar login!
+		}
 
-        let huidigNummer = null;
-        const audioPlayer = document.getElementById('audioPlayer');
-        const audioBtn = document.getElementById('audioBtn');
+		let gameSongs = []; // Wordt straks gevuld vanuit songs.json
+		let huidigNummer = null;
+		const audioPlayer = document.getElementById('audioPlayer');
+		const audioBtn = document.getElementById('audioBtn');
 
-        // 2. KIES EEN NUMMER (Vervangt de SQL query)
-        function laadNieuwNummer() {
-            document.getElementById('status').innerText = "Liedje zoeken...";
-            document.getElementById('songCard').style.display = "none";
-            document.getElementById('nextBtn').style.display = "none";
-            audioBtn.disabled = true;
-            audioBtn.innerText = "▶";
-            audioBtn.classList.remove('playing');
+		// 2. LAAD DE JSON DATABASE (Vervangt hj2_db.php)
+		function startApp() {
+			fetch('songs.json')
+				.then(response => response.json())
+				.then(data => {
+					gameSongs = data;
+					laadNieuwNummer(); // Start het spel zodra de database is geladen
+				})
+				.catch(err => {
+					document.getElementById('status').innerText = "Fout bij laden van de database (songs.json).";
+				});
+		}
 
-            // Check of er een ?id=X in de URL staat (Multiplayer sync via JS)
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlId = urlParams.get('id');
+		// 3. KIES EEN NUMMER (Nu uit de geladen JSON lijst)
+		function laadNieuwNummer() {
+			if (gameSongs.length === 0) return;
 
-            if (urlId) {
-                huidigNummer = gameSongs.find(s => s.id == urlId) || gameSongs[Math.floor(Math.random() * gameSongs.length)];
-            } else {
-                huidigNummer = gameSongs[Math.floor(Math.random() * gameSongs.length)];
-            }
+			document.getElementById('status').innerText = "Liedje zoeken...";
+			document.getElementById('songCard').style.display = "none";
+			document.getElementById('nextBtn').style.display = "none";
+			audioBtn.disabled = true;
+			audioBtn.innerText = "▶";
+			audioBtn.classList.remove('playing');
 
-            zoekIniTunes(huidigNummer);
-        }
+			const urlParams = new URLSearchParams(window.location.search);
+			const urlId = urlParams.get('id');
+
+			if (urlId) {
+				huidigNummer = gameSongs.find(s => s.id == urlId) || gameSongs[Math.floor(Math.random() * gameSongs.length)];
+			} else {
+				huidigNummer = gameSongs[Math.floor(Math.random() * gameSongs.length)];
+			}
+
+			zoekIniTunes(huidigNummer);
+		}
 
         // 3. CALL ITUNES API (Vervangt cURL uit PHP)
 		function zoekIniTunes(song) {
@@ -158,7 +171,7 @@
         }
 
         // Start het eerste nummer zodra de pagina laadt
-        window.onload = laadNieuwNummer;
+        window.onload = startApp;
 
         // PWA Service Worker registratie
         if ('serviceWorker' in navigator) {

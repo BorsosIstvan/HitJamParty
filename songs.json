@@ -1,0 +1,6 @@
+[
+  { "id": 1, "artist": "Michael Jackson", "title": "Thriller", "year": 1982 },
+  { "id": 2, "artist": "Dua Lipa", "title": "Levitating", "year": 2020 },
+  { "id": 3, "artist": "Avicii", "title": "Wake Me Up", "year": 2013 },
+  { "id": 4, "artist": "Queen", "title": "Bohemian Rhapsody", "year": 1975 }
+]
