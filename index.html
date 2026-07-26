@@ -320,17 +320,34 @@
 				gekozenKnop.classList.add('correct');
 				feedbackContainer.style.color = "#00ffcc";
 				feedbackContainer.innerText = "🎉 Helemaal goed!";
+				
+				// PUNTEN BEREKENEN: 10 basispunten + streak bonus (bijv. streak van 3 geeft 3 bonuspunten)
+				huidigeStreak++;
+				huidigeScore += 10 + huidigeStreak;
 			} else {
 				gekozenKnop.classList.add('incorrect');
 				feedbackContainer.style.color = "#ff2d55";
 				feedbackContainer.innerText = `😢 Helaas! Het was ${correctJaar}.`;
 
-				// Kleur de juiste knop alsnog groen om te laten zien wat het moest zijn
+				// Streak wordt gereset bij een fout antwoord
+				huidigeStreak = 0;
+
+				// Kleur de juiste knop alsnog groen
 				alleKnoppen.forEach(btn => {
 					if (parseInt(btn.innerText) === correctJaar) {
 						btn.classList.add('correct');
 					}
 				});
+			}
+
+			// Update de cijfers live op het scherm
+			document.getElementById('scoreDisplay').innerText = huidigeScore;
+			document.getElementById('streakDisplay').innerText = huidigeStreak;
+
+			// Sla de eventuele nieuwe highscore lokaal op in de browser
+			const oudeHighScore = localStorage.getItem(`hj_highscore_${huidigeSpeler}`) || 0;
+			if (huidigeScore > oudeHighScore) {
+				localStorage.setItem(`hj_highscore_${huidigeSpeler}`, huidigeScore);
 			}
 
 			// Toon direct de infokaart van het nummer en verberg de onthulknop
@@ -341,6 +358,7 @@
 			document.getElementById('revealBtn').style.display = "none";
 			document.getElementById('nextBtn').style.display = "block";
 		}
+
 
     </script>
 </body>
