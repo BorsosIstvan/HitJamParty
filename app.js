@@ -29,7 +29,7 @@ function startApp() {
             
             // 🔥 NIEUW: Tel het aantal hits en toon de app-versie live op het scherm!
             const aantalHits = gameSongs.length;
-            const appVersie = "v6.0"; // Match dit met je huidige sw.js versie indien gewenst
+            const appVersie = "v6.1"; // Match dit met je huidige sw.js versie indien gewenst
             
             document.getElementById('appSubtitle').innerHTML = 
                 `Serverless PWA ${appVersie} • <strong>${aantalHits}</strong> Rock, Pop & Disco Hits!`;
