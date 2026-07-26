@@ -67,9 +67,10 @@
 
     <script>
 		// 1. BEVEILIGING: Check of de gebruiker is ingelogd (Vervangt session_start())
+		// Check of de speler een naam heeft ingesteld
 		const huidigeSpeler = localStorage.getItem('hj_current_user');
 		if (!huidigeSpeler) {
-			window.location.href = "login.html"; // Niet ingelogd? Terug naar login!
+			window.location.href = "login.html"; // Geen naam? Eerst invullen!
 		}
 
 		let gameSongs = []; // Wordt straks gevuld vanuit songs.json
