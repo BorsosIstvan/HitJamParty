@@ -18,6 +18,7 @@ const audioBtn = document.getElementById('audioBtn');
 // ==========================================
 // 2. APPLICATIE START & ALBUM LOGICA
 // ==========================================
+
 function startApp() {
     document.getElementById('playerDisplay').innerText = huidigeSpeler;
     
@@ -25,12 +26,21 @@ function startApp() {
         .then(response => response.json())
         .then(data => {
             gameSongs = data;
+            
+            // 🔥 NIEUW: Tel het aantal hits en toon de app-versie live op het scherm!
+            const aantalHits = gameSongs.length;
+            const appVersie = "v6.0"; // Match dit met je huidige sw.js versie indien gewenst
+            
+            document.getElementById('appSubtitle').innerHTML = 
+                `Serverless PWA ${appVersie} • <strong>${aantalHits}</strong> Rock, Pop & Disco Hits!`;
+
             wisselVanAlbum(); 
         })
         .catch(err => {
             document.getElementById('status').innerText = "Fout bij laden van de database.";
         });
 }
+
 
 function wisselVanAlbum() {
     const gekozenPack = document.getElementById('packSelect').value;
