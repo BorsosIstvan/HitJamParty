@@ -6,6 +6,7 @@
     <title>HitJamParty - PWA</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#160c1b">
+	<script src="https://cloudflare.com"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #0b0c10; color: #ffffff; display: flex; justify-content: center; min-height: 100vh; }
         .app-container { width: 100%; max-width: 450px; background: linear-gradient(180deg, #160c1b 0%, #0b0c10 100%); padding: 25px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 30px rgba(0,0,0,0.6); text-align: center; }
@@ -123,6 +124,15 @@
             <button id="nextBtn" class="btn btn-next" onclick="laadNieuwNummer()">Volgend Nummer</button>
         </div>
 		
+		<!-- 📱 DEEL DE APP MET VRIENDEN -->
+		<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+			<p style="color: #aaa; font-size: 13px; margin-bottom: 12px; letter-spacing: 0.5px;">🎉 Scan om te installeren op je telefoon:</p>
+			
+			<!-- De container waar de QR-code in wordt getekend -->
+			<div id="qrcode" style="background: white; padding: 12px; display: inline-block; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);"></div>
+		</div>
+
+		
         <div class="footer">
             POWERED BY JBL & APPLE MUSIC
         </div>
@@ -213,7 +223,7 @@
 					audioPlayer.src = data.results[0].previewUrl; // FIX: results is een array [0]
 					document.getElementById('status').innerText = ""; 
 					audioBtn.disabled = false;
-					document.getElementById('revealBtn').style.display = "block";
+					document.getElementById('revealBtn').style.display = "none";
 					genereerQuizKnoppen(song.year);
 				} else {
 					document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer.";
@@ -358,7 +368,17 @@
 			document.getElementById('revealBtn').style.display = "none";
 			document.getElementById('nextBtn').style.display = "block";
 		}
-
+		// Genereer automatisch de QR-code bij het laden van de pagina
+		window.addEventListener('DOMContentLoaded', () => {
+			new QRCode(document.getElementById("qrcode"), {
+				text: "https://borsosistvan.github.io/HitJamParty",
+				width: 140,
+				height: 140,
+				colorDark : "#0b0c10", // De kleur van de blokjes (matcht met je achtergrond)
+				colorLight : "#ffffff", // De achtergrondkleur van de QR-code
+				correctLevel : QRCode.CorrectLevel.H
+			});
+		});
 
     </script>
 </body>
