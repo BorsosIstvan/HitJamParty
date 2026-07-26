@@ -30,7 +30,7 @@ let actieveWinampModus = 1;
 
 function initWinampAudioEngine() {
     const audioElement = document.getElementById('partyAudioEngine');
-    const app = document.getElementById('hitjamApp');
+    const app = document.getElementById('winampContainer');
     if (!audioElement || !app || audioContext) return;
 
     try {
@@ -187,7 +187,7 @@ function renderWinampVisuals() {
  * HOOFDFUNCTIE
  */
 function toggleWinampVisualizer(status = true) {
-    const app = document.getElementById('hitjamApp');
+    const app = document.getElementById('winampContainer');
     if (!app) return;
 
     if (status) {

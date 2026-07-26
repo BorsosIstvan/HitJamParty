@@ -1,5 +1,5 @@
 // 1. Verander dit nummer (bijv. naar v2, v3) telkens als je de app updatet!
-const CACHE_NAME = 'hitjamparty-v6.1'; // Verhoogd naar v6!
+const CACHE_NAME = 'hitjamparty-v6.2'; // Verhoogd naar v6!
 
 const ASSETS = [
   '.',
