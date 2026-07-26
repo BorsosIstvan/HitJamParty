@@ -37,6 +37,17 @@
             <h1 class="logo">HitJamParty</h1>
             <p style="color:#aaa; font-size:14px;">100% Serverless PWA via GitHub!</p>
         </div>
+		
+		<!-- 💿 NIEUW: PROFESSIONELE PAKKET SELECTOR -->
+		<div style="margin: 15px 0;">
+			<label for="packSelect" style="color: #aaa; font-size: 14px; display: block; margin-bottom: 5px;">Kies je Hitster Album:</label>
+			<select id="packSelect" onchange="wisselVanAlbum()" style="width: 100%; padding: 12px; border-radius: 10px; background: #1f2026; color: white; border: 1px solid #33343f; font-size: 16px; font-weight: bold; text-align: center;">
+				<option value="alle">🌍 Alle Hits Mix</option>
+				<option value="rock">🎸 Hitster Rock Edition</option>
+				<option value="pop">🎤 Modern Pop Hits</option>
+				<option value="disco">🪩 Disco Fever</option>
+			</select>
+		</div>
 
         <!-- Status meldingen (Laden / Fouten) -->
         <div id="status" class="status-msg">Liedje laden...</div>
@@ -73,27 +84,49 @@
 			window.location.href = "login.html"; // Geen naam? Eerst invullen!
 		}
 
-		let gameSongs = []; // Wordt straks gevuld vanuit songs.json
-		let huidigNummer = null;
+		//let gameSongs = []; // Wordt straks gevuld vanuit songs.json
+		//let huidigNummer = null;
 		const audioPlayer = document.getElementById('audioPlayer');
 		const audioBtn = document.getElementById('audioBtn');
 
-		// 2. LAAD DE JSON DATABASE (Vervangt hj2_db.php)
+		let gameSongs = [];       // De complete database uit de JSON
+		let actieveLijst = [];    // De gefilterde lijst van het gekozen album
+		let huidigNummer = null;
+
+		// 1. Laad de JSON database
 		function startApp() {
 			fetch('songs.json')
 				.then(response => response.json())
 				.then(data => {
 					gameSongs = data;
-					laadNieuwNummer(); // Start het spel zodra de database is geladen
+					wisselVanAlbum(); // Vul meteen de actieve lijst en start het eerste nummer
 				})
 				.catch(err => {
-					document.getElementById('status').innerText = "Fout bij laden van de database (songs.json).";
+					document.getElementById('status').innerText = "Fout bij laden van de database.";
 				});
 		}
 
-		// 3. KIES EEN NUMMER (Nu uit de geladen JSON lijst)
+		// 2. Filter de nummers op basis van het gekozen album
+		function wisselVanAlbum() {
+			const gekozenPack = document.getElementById('packSelect').value;
+			
+			if (gekozenPack === "alle") {
+				actieveLijst = [...gameSongs]; // Kopieer alle nummers
+			} else {
+				// Filter alleen de nummers die bij het gekozen album horen
+				actieveLijst = gameSongs.filter(song => song.pack === gekozenPack);
+			}
+
+			// Start direct een nieuw nummer uit het nieuw gekozen album
+			laadNieuwNummer();
+		}
+
+		// 3. Kies een random nummer uit de ACTIEVE (gefilterde) lijst
 		function laadNieuwNummer() {
-			if (gameSongs.length === 0) return;
+			if (actieveLijst.length === 0) {
+				document.getElementById('status').innerText = "Dit album is nog leeg!";
+				return;
+			}
 
 			document.getElementById('status').innerText = "Liedje zoeken...";
 			document.getElementById('songCard').style.display = "none";
@@ -102,17 +135,12 @@
 			audioBtn.innerText = "▶";
 			audioBtn.classList.remove('playing');
 
-			const urlParams = new URLSearchParams(window.location.search);
-			const urlId = urlParams.get('id');
-
-			if (urlId) {
-				huidigNummer = gameSongs.find(s => s.id == urlId) || gameSongs[Math.floor(Math.random() * gameSongs.length)];
-			} else {
-				huidigNummer = gameSongs[Math.floor(Math.random() * gameSongs.length)];
-			}
+			// Kies nu uit de actieveLijst in plaats van gameSongs!
+			huidigNummer = actieveLijst[Math.floor(Math.random() * actieveLijst.length)];
 
 			zoekIniTunes(huidigNummer);
 		}
+
 
         // 3. CALL ITUNES API (Vervangt cURL uit PHP)
 		function zoekIniTunes(song) {
