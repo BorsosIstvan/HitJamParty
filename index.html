@@ -28,6 +28,31 @@
         
         .status-msg { color: #ff2d55; font-weight: bold; margin: 20px 0; }
         .footer { font-size: 11px; color: #4f4f4f; text-align: center; letter-spacing: 1px; }
+		.btn-quiz {
+			background: #1f2026;
+			color: white;
+			border: 1px solid #33343f;
+			padding: 14px;
+			border-radius: 10px;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+		.btn-quiz:active {
+			transform: scale(0.95);
+		}
+		.btn-quiz.correct {
+			background: #00ffcc !important;
+			color: #0b0c10 !important;
+			border-color: #00ffcc !important;
+		}
+		.btn-quiz.incorrect {
+			background: #ff2d55 !important;
+			color: white !important;
+			border-color: #ff2d55 !important;
+		}
+
     </style>
 </head>
 <body>
@@ -57,6 +82,16 @@
             <button id="audioBtn" class="btn-audio" onclick="toggleAudio()" disabled>▶</button>
             <audio id="audioPlayer" onended="audioGestaakt()"></audio>
         </div>
+		
+		<!-- 🧱 QUIZKOPPEN CONTAINER -->
+		<div id="quizContainer" style="margin: 20px 0; display: none;">
+			<p style="color: #aaa; font-size: 14px; margin-bottom: 10px;">Raad het juiste jaartal:</p>
+			<div id="quizButtons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+				<!-- Knoppen worden hier dynamisch ingeladen via JavaScript -->
+			</div>
+			<div id="quizFeedback" style="margin-top: 15px; font-weight: bold; font-size: 18px;"></div>
+		</div>
+
 		
         <!-- GEHEIME INFOKAART -->
         <div id="songCard" class="song-info-card">
@@ -134,6 +169,7 @@
 			audioBtn.disabled = true;
 			audioBtn.innerText = "▶";
 			audioBtn.classList.remove('playing');
+			document.getElementById('quizContainer').style.display = "none";
 
 			// Kies nu uit de actieveLijst in plaats van gameSongs!
 			huidigNummer = actieveLijst[Math.floor(Math.random() * actieveLijst.length)];
@@ -157,6 +193,7 @@
 					document.getElementById('status').innerText = ""; 
 					audioBtn.disabled = false;
 					document.getElementById('revealBtn').style.display = "block";
+					genereerQuizKnoppen(song.year);
 				} else {
 					document.getElementById('status').innerText = "Fout: Geen audio gevonden voor dit nummer.";
 					document.getElementById('nextBtn').style.display = "block";
@@ -213,6 +250,77 @@
                 navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
             });
         }
+		
+		// 1. Genereer 4 meerkeuzeopties (1 goede en 3 foute jaartallen)
+		function genereerQuizKnoppen(correctJaar) {
+			const quizButtonsContainer = document.getElementById('quizButtons');
+			const feedbackContainer = document.getElementById('quizFeedback');
+			
+			quizButtonsContainer.innerHTML = ""; // Maak leeg van de vorige ronde
+			feedbackContainer.innerText = "";    // Reset feedback tekst
+
+			// Verzamel unieke jaartallen uit de actieve lijst om als foute opties te gebruiken
+			let alleJaren = [...new Set(actieveLijst.map(s => s.year))];
+			// Haal het juiste jaar er tijdelijk uit om duplicaten te voorkomen
+			alleJaren = alleJaren.filter(y => y !== correctJaar);
+
+			// Hussel de foute jaren en pak er maximaal 3
+			alleJaren.sort(() => 0.5 - Math.random());
+			let gekozenOpties = alleJaren.slice(0, 3);
+			
+			// Voeg het juiste jaar toe aan de opties
+			gekozenOpties.push(correctJaar);
+
+			// Hussel de uiteindelijke 4 opties zodat het juiste antwoord niet altijd op dezelfde plek staat
+			gekozenOpties.sort(() => 0.5 - Math.random());
+
+			// Maak voor elke optie een HTML-knop aan
+			gekozenOpties.forEach(jaar => {
+				const knop = document.createElement('button');
+				knop.className = 'btn-quiz';
+				knop.innerText = jaar;
+				knop.onclick = () => controleerAntwoord(knop, jaar, correctJaar);
+				quizButtonsContainer.appendChild(knop);
+			});
+
+			// Toon de quiz container
+			document.getElementById('quizContainer').style.display = "block";
+		}
+
+		// 2. Controleer of de speler het goed heeft geraden
+		function controleerAntwoord(gekozenKnop, gekozenJaar, correctJaar) {
+			const alleKnoppen = document.querySelectorAll('.btn-quiz');
+			const feedbackContainer = document.getElementById('quizFeedback');
+
+			// Deactiveer alle knoppen direct zodat je niet meerdere keren kunt klikken
+			alleKnoppen.forEach(btn => btn.disabled = true);
+
+			if (gekozenJaar === correctJaar) {
+				gekozenKnop.classList.add('correct');
+				feedbackContainer.style.color = "#00ffcc";
+				feedbackContainer.innerText = "🎉 Helemaal goed!";
+			} else {
+				gekozenKnop.classList.add('incorrect');
+				feedbackContainer.style.color = "#ff2d55";
+				feedbackContainer.innerText = `😢 Helaas! Het was ${correctJaar}.`;
+
+				// Kleur de juiste knop alsnog groen om te laten zien wat het moest zijn
+				alleKnoppen.forEach(btn => {
+					if (parseInt(btn.innerText) === correctJaar) {
+						btn.classList.add('correct');
+					}
+				});
+			}
+
+			// Toon direct de infokaart van het nummer en verberg de onthulknop
+			document.getElementById('songYear').innerText = huidigNummer.year;
+			document.getElementById('songTitle').innerText = huidigNummer.title;
+			document.getElementById('songArtist').innerText = huidigNummer.artist;
+			document.getElementById('songCard').style.display = "block";
+			document.getElementById('revealBtn').style.display = "none";
+			document.getElementById('nextBtn').style.display = "block";
+		}
+
     </script>
 </body>
 </html>
