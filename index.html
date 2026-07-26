@@ -124,12 +124,17 @@
             <button id="nextBtn" class="btn btn-next" onclick="laadNieuwNummer()">Volgend Nummer</button>
         </div>
 		
-		<!-- 📱 DEEL DE APP MET VRIENDEN -->
+		<!-- 📱 DEEL DE APP MET VRIENDEN (KLIKBAAR) -->
 		<div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-			<p style="color: #aaa; font-size: 13px; margin-bottom: 12px; letter-spacing: 0.5px;">🎉 Scan om te installeren op je telefoon:</p>
+			<!-- Klikbare tekst die de functie aanroept -->
+			<p onclick="toggleQRCode()" style="color: #ff9500; font-size: 14px; margin-bottom: 12px; letter-spacing: 0.5px; cursor: pointer; user-select: none; font-weight: bold;">
+				<span id="qrArrow">▶️</span> Scan om te installeren op je telefoon
+			</p>
 			
-			<!-- De container waar de QR-code in wordt getekend -->
-			<div id="qrcode" style="background: white; padding: 12px; display: inline-block; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);"></div>
+			<!-- De QR-code staat nu standaard verborgen via display: none -->
+			<div id="qrWrapper" style="display: none; margin-top: 10px;">
+				<div id="qrcode" style="background: white; padding: 12px; display: inline-block; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);"></div>
+			</div>
 		</div>
 
 		
@@ -368,6 +373,7 @@
 			document.getElementById('revealBtn').style.display = "none";
 			document.getElementById('nextBtn').style.display = "block";
 		}
+		
 		// Genereer automatisch de QR-code bij het laden van de pagina
 		window.addEventListener('DOMContentLoaded', () => {
 			new QRCode(document.getElementById("qrcode"), {
@@ -379,6 +385,22 @@
 				correctLevel : QRCode.CorrectLevel.H
 			});
 		});
+
+		function toggleQRCode() {
+			const qrWrapper = document.getElementById('qrWrapper');
+			const qrArrow = document.getElementById('qrArrow');
+
+			// Als de QR-code verborgen is, toon hem dan
+			if (qrWrapper.style.display === "none") {
+				qrWrapper.style.display = "block";
+				qrArrow.innerText = "🔽"; // Pijltje naar beneden als hij open is
+			} else {
+				// Anders verbergen we hem weer
+				qrWrapper.style.display = "none";
+				qrArrow.innerText = "▶️"; // Pijltje naar rechts als hij dicht is
+			}
+		}
+
 
     </script>
 </body>
