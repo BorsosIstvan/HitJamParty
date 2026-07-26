@@ -76,6 +76,23 @@
 
         <!-- Status meldingen (Laden / Fouten) -->
         <div id="status" class="status-msg">Liedje laden...</div>
+		
+		<!-- 🧱 SCORE & STREAK DISPLAY -->
+		<div style="display: flex; justify-content: space-between; margin: 15px 0; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+			<div>
+				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Speler</div>
+				<div id="playerDisplay" style="font-size: 18px; font-weight: bold; color: #ff9500;">---</div>
+			</div>
+			<div style="text-align: center;">
+				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Huidige Score</div>
+				<div id="scoreDisplay" style="font-size: 22px; font-weight: 900; color: #00ffcc;">0</div>
+			</div>
+			<div style="text-align: right;">
+				<div style="font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">🔥 Streak</div>
+				<div id="streakDisplay" style="font-size: 22px; font-weight: 900; color: #ff2d55;">0</div>
+			</div>
+		</div>
+
 
         <!-- AUDIO CONTROLLER -->
         <div class="play-box">
@@ -112,34 +129,38 @@
     </div>
 
     <script>
-		// 1. BEVEILIGING: Check of de gebruiker is ingelogd (Vervangt session_start())
-		// Check of de speler een naam heeft ingesteld
+		// 1. BEVEILIGING: Check of de gebruiker een naam heeft ingesteld
 		const huidigeSpeler = localStorage.getItem('hj_current_user');
 		if (!huidigeSpeler) {
-			window.location.href = "login.html"; // Geen naam? Eerst invullen!
+			window.location.href = "login.html";
 		}
 
-		//let gameSongs = []; // Wordt straks gevuld vanuit songs.json
-		//let huidigNummer = null;
+		// Score variabelen initialiseren
+		let huidigeScore = 0;
+		let huidigeStreak = 0;
+
+		let gameSongs = [];       
+		let actieveLijst = [];    
+		let huidigNummer = null;
 		const audioPlayer = document.getElementById('audioPlayer');
 		const audioBtn = document.getElementById('audioBtn');
 
-		let gameSongs = [];       // De complete database uit de JSON
-		let actieveLijst = [];    // De gefilterde lijst van het gekozen album
-		let huidigNummer = null;
-
-		// 1. Laad de JSON database
+		// 2. Laad de JSON database en zet de spelersnaam klaar
 		function startApp() {
+			// Toon de speelnaam direct in het scoreblok
+			document.getElementById('playerDisplay').innerText = huidigeSpeler;
+			
 			fetch('songs.json')
 				.then(response => response.json())
 				.then(data => {
 					gameSongs = data;
-					wisselVanAlbum(); // Vul meteen de actieve lijst en start het eerste nummer
+					wisselVanAlbum(); 
 				})
 				.catch(err => {
 					document.getElementById('status').innerText = "Fout bij laden van de database.";
 				});
 		}
+
 
 		// 2. Filter de nummers op basis van het gekozen album
 		function wisselVanAlbum() {
