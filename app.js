@@ -214,7 +214,7 @@ window.onload = function() {
 
     if (typeof QRCode !== 'undefined') {
         new QRCode(document.getElementById("qrcode"), {
-            text: "https://js.org",
+            text: "https://borsosistvan.github.io/HitJamParty/",
             width: 140,
             height: 140,
             colorDark : "#0b0c10", 
