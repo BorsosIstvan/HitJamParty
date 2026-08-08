@@ -1,15 +1,14 @@
 [
-  { "id": 1, "artist": "Bon Jovi", "title": "Never Say Goodbye", "year": 1982, "pack": "rock" },
-  { "id": 2, "artist": "Poison", "title": "Ecery Rose Has Its Thorn", "year": 2020, "pack": "rock" },
-  { "id": 3, "artist": "Kiss", "title": "Forever", "year": 2013, "pack": "rock" },
-  { "id": 4, "artist": "Patty Smyth ft. Don Henley", "title": "Sometimes Love Just Ain't Enought", "year": 2013, "pack": "rock" },
-  { "id": 5, "artist": "Gary Moore", "title": "Empty Rooms", "year": 2013, "pack": "rock" },
-  { "id": 6, "artist": "Queensryche", "title": "Silent Lucidity", "year": 2013, "pack": "rock" },
-  { "id": 7, "artist": "Kiss", "title": "Forever", "year": 2013, "pack": "rock" },
-  { "id": 8, "artist": "Scorpions", "title": "Wind Of Change", "year": 2013, "pack": "rock" },
-  { "id": 3, "artist": "Extreme", "title": "More Dan Words", "year": 2013, "pack": "rock" },
-  { "id": 3, "artist": "Heart", "title": "These Dreams", "year": 2013, "pack": "rock" },
-  { "id": 3, "artist": "Boston", "title": "Amanda", "year": 2013, "pack": "rock" },
-  { "id": 3, "artist": "Robby Valentine", "title": "Over And Over Again", "year": 2013, "pack": "rock" },
-  { "id": 3, "artist": "Thin Lizzy", "title": "Stil In Love With You", "year": 2013, "pack": "rock" }
+  { "id": 1, "artist": "Bon Jovi", "title": "Never Say Goodbye", "year": 1986, "pack": "rock" },
+  { "id": 2, "artist": "Poison", "title": "Every Rose Has Its Thorn", "year": 1988, "pack": "rock" },
+  { "id": 3, "artist": "Kiss", "title": "Forever", "year": 1989, "pack": "rock" },
+  { "id": 4, "artist": "Patty Smyth ft. Don Henley", "title": "Sometimes Love Just Ain't Enough", "year": 1992, "pack": "rock" },
+  { "id": 5, "artist": "Gary Moore", "title": "Empty Rooms", "year": 1984, "pack": "rock" },
+  { "id": 6, "artist": "Queensrÿche", "title": "Silent Lucidity", "year": 1990, "pack": "rock" },
+  { "id": 7, "artist": "Scorpions", "title": "Wind Of Change", "year": 1990, "pack": "rock" },
+  { "id": 8, "artist": "Extreme", "title": "More Than Words", "year": 1990, "pack": "rock" },
+  { "id": 9, "artist": "Heart", "title": "These Dreams", "year": 1985, "pack": "rock" },
+  { "id": 10, "artist": "Boston", "title": "Amanda", "year": 1986, "pack": "rock" },
+  { "id": 11, "artist": "Robby Valentine", "title": "Over And Over Again", "year": 1991, "pack": "rock" },
+  { "id": 12, "artist": "Thin Lizzy", "title": "Still In Love With You", "year": 1974, "pack": "rock" }
 ]
