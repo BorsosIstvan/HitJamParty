@@ -1,3 +1,5 @@
 https://borsosistvan.github.io/HitJamParty
 
-Click op de link om start de app.
+Klik op de link om de app te openen.
+Click the link to open the app.
+Kattints a linkre az alkalmazás megnyitásához.
